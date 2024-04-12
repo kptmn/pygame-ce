@@ -293,7 +293,16 @@ if host_machine.cpu_family() == 'arm'
     # first check if compiler supports the flag, and use it then. Needed only
     # on 32-bit armv7.
     flag = '-mfpu=neon'
-    if cc.has_argument(flag)
+    if (
+        cc.has_argument(flag)
+        and cc.compiles(
+            '''
+            #if !(defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__))
+            #error
+            #endif
+            ''',
+        )
+    )
         simd_sse2_neon_flags += flag
         simd_sse2_neon = true
     endif
