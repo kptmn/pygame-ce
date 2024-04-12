@@ -23,7 +23,8 @@ rm -rf /usr/local/lib/libgthread*
 rm -rf /usr/local/lib/libintl*
 rm -rf /usr/local/lib/libbrotlidec*
 rm -rf /usr/local/lib/libopus*
-rm -rf /usr/local/opt/freetype
+rm -rf /usr/local/lib/freetype*
+rm -rf /usr/local/opt/freetype*
 
 rm -rf /usr/local/Cellar/libtiff
 rm -rf /usr/local/Cellar/libsndfile
@@ -32,7 +33,16 @@ rm -rf /usr/local/Cellar/brotli
 rm -rf /usr/local/Cellar/pcre*
 rm -rf /usr/local/Cellar/opusfile
 rm -rf /usr/local/Cellar/opus
-rm -rf /usr/local/Cellar/freetype
+rm -rf /usr/local/Cellar/freetype*
+
+rm -rf /opt/homebrew/Cellar/libtiff
+rm -rf /opt/homebrew/Cellar/libsndfile
+rm -rf /opt/homebrew/Cellar/glib
+rm -rf /opt/homebrew/Cellar/brotli
+rm -rf /opt/homebrew/Cellar/pcre*
+rm -rf /opt/homebrew/Cellar/opusfile
+rm -rf /opt/homebrew/Cellar/opus
+rm -rf /opt/homebrew/Cellar/freetype*
 
 rm -rf /usr/local/share/doc/tiff-*
 rm -rf /usr/local/share/doc/libsndfile
