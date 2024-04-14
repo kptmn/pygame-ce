@@ -95,3 +95,57 @@ jobs:
           export SDL_VIDEODRIVER=dummy
           export SDL_AUDIODRIVER=disk
           python3 -m pygame.tests -v --exclude opengl,music,timing --time_out 300
+    
+    # Upload the generated files under github actions assets section
+    - name: Upload dist
+      uses: actions/upload-artifact@v4
+      with:
+        name: pygame-multiarch-${{ matrix.arch }}-dist
+        path: ~/artifacts/*.whl
+
+  # test wheels built on armv7 on armv6. Why?
+  # because piwheels expects the same armv7 wheel to work on both armv7 and armv6
+  test-armv7-on-armv6:
+    needs: build-multiarch
+    name: Debian (Bookworm - 12) [build - armv7, test - armv6]
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Download all multiarch artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: pygame-multiarch-armv7-dist
+        path: ~/artifacts
+
+    - name: Rename arm wheel in artifacts
+      run: |
+        cd ~/artifacts
+        for f in *; do
+          mv "$f" "${f//armv7l/armv6l}"
+        done
+
+    - name: Test armv7 wheel on armv6
+      uses: uraimo/run-on-arch-action@v2.7.2
+      with:
+        arch: armv6
+        distro: bookworm
+
+        # Mount the artifacts directory as /artifacts in the container
+        dockerRunArgs: --volume ~/artifacts:/artifacts
+
+        # The shell to run commands with in the container
+        shell: /bin/sh
+
+        # Install runtime dependencies (no need for dev dependencies)
+        install: |
+          apt-get update --fix-missing
+          apt-get install libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-ttf-2.0-0 libfreetype6 libportmidi0 fontconfig -y
+          apt-get install python3-pip -y
+
+        # Install wheel and run unit tests
+        run: |
+          echo "\nInstalling wheel\n"
+          pip3 install --no-index --pre --break-system-packages --find-links /artifacts pygame-ce
+          echo "\nRunning tests\n"
+          export SDL_VIDEODRIVER=dummy
+          export SDL_AUDIODRIVER=disk
+          python3 -m pygame.tests -v --exclude opengl,music,timing --time_out 300
