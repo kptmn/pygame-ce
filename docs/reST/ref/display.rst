@@ -771,7 +771,7 @@ required).
 
 .. function:: is_vsync
 
-   | :sl:`Returns True if vertical synchronisation for pygame.display.flip() and pygame.display.update() is enabled`
+   | :sl:`Returns True if vertical synchronization for pygame.display.flip() and pygame.display.update() is enabled`
    | :sg:`is_vsync() -> bool`
 
    .. versionadded:: 2.2.0
